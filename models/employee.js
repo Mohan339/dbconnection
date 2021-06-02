@@ -61,4 +61,4 @@ const employeeSchema= new Schema({
                 }
     
 });
-module.exports=mongoose.model("Employees", employeeSchema)
+module.exports=mongoose.model("employees dbs", employeeSchema)
