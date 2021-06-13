@@ -1,10 +1,13 @@
-const {buildSchema}= require("graphql")
+
+const {gql} = require("apollo-server-express")
 
 
-module.exports=buildSchema(`
+
+const typeDefs = gql`
+
             type Trainee {
                 TraineeId: String!
-                Trainee_name : String!
+                Trainee_name: String!
                 Date_of_birth: String!
                 Date_of_joining: String
                 Date_off_course_end: String
@@ -21,7 +24,7 @@ module.exports=buildSchema(`
 
             type Employee {
                 EmployeeId: String!
-                Employee_name : String!
+                Employee_name: String!
                 Date_of_birth: String!
                 Date_of_joining: String
                 Date_off_course_end: String
@@ -30,18 +33,41 @@ module.exports=buildSchema(`
                 Email_ID: String
                 PAN_card_number: String
                 Department_looking_for_Freshers: String 
-                Company_name : String
+                Company_name: String
                 Related_files: String
-                No_of_years : String
-                Technology : String
-                Expiry_date_of_passport :String
-                current_salary: String
-                
+                No_of_years: String
+                Technology: String
+                Expiry_date_of_passport:String
+                current_salary: String    
             }
+            type Project{
+                projectName: String!
+                clientName: String!
+                selectType: String!
+                startDate: String!
+                EndDate: String!
+                selectPriority: String!
+                selectTeamLead: String!
+                selectRate:String!
+                selectTeam: String!
+            }
+
+            input ProjectInput{
+                projectName: String!
+                clientName: String!
+                selectType: String!
+                startDate: String!
+                EndDate: String!
+                selectPriority: String!
+                selectTeamLead: String!
+                selectRate:String!
+                selectTeam: String!
+                   }   
+
 
             input EmployeeInput{
                 EmployeeId: String!
-                Employee_name : String!
+                Employee_name: String!
                 Date_of_birth: String!
                 Date_of_joining: String
                 Date_off_course_end: String
@@ -50,18 +76,18 @@ module.exports=buildSchema(`
                 Email_ID: String
                 PAN_card_number: String
                 Department_looking_for_Freshers: String
-                Company_name : String
+                Company_name: String
                 Related_files: String
-                No_of_years : String
-                Technology : String
-                Expiry_date_of_passport :String
+                No_of_years: String
+                Technology: String
+                Expiry_date_of_passport:String
                 current_salary: String
                
             }
 
             input TraineeInput{
                 TraineeId: String!
-                Trainee_name : String!
+                Trainee_name: String!
                 Date_of_birth: String!
                 Date_of_joining: String
                 Date_off_course_end: String
@@ -74,22 +100,20 @@ module.exports=buildSchema(`
                 Passport_number: String
                 Technology: String
                 Course_fees: Float
-                }
+                }           
 
 
-            type RootQuery {
-                traineeDetails: [Trainee]
+            type Query {               
+                traineeDetails: [Trainee]              
                 employeeDetails: [Employee]
-                
+                projectDetails: [Project]
             }
 
-            type Mutation {
+            type Mutation {                
                 createTrainee(traineeInput: TraineeInput): Trainee
                 createEmployee(employeeInput: EmployeeInput): Employee
-
-                    }
-            schema {
-                query: RootQuery
-                mutation: Mutation
-            }
-        `)
+                createProject(pInput: ProjectInput): Project
+                }
+             
+        `;
+module.exports = {typeDefs};

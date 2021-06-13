@@ -1,8 +1,10 @@
-
+const Projectschema = require("../../models/projects");
 const Employeeschema = require("../../models/employee");
 const Traineeschema = require("../../models/trainee") ;
 
-module.exports= {
+
+const resolvers = {
+    Query:{
     traineeDetails: () =>{
         return Traineeschema.find().then(traineeDetails => {
             return traineeDetails.map(trainee => {
@@ -10,9 +12,10 @@ module.exports= {
             });
         })
         .catch(err=>{
-            console.log("err");
+            console.log(err);
         });
     },
+ 
     employeeDetails: ()=> {
         return Employeeschema.find()
             .then(employeeDetails => {
@@ -21,13 +24,31 @@ module.exports= {
             });
         })
         .catch(err=>{
-            console.log("err");
-        });;
+            console.log(err);
+        });
     },
-    createTrainee: (args) => {
+     projectDetails: () => {
+    
+             return Projectschema.find().then(projectDetails =>{
+               return projectDetails.map(x => {
+                 return { ...x._doc };
+             });
+            })
+         .catch(err =>{
+             console.log(err);
+         });
+         }
+        
+        
+           
+    },
+
+    Mutation:{
+
+    createTrainee: (parent, args) => {
         const trainee = new Traineeschema({
-            TraineeId:args.traineeInput.TraineeId,
-        Trainee_name :args.traineeInput.Trainee_name,
+        TraineeId: args.traineeInput.TraineeId,
+        Trainee_name:args.traineeInput.Trainee_name,
         Date_of_birth: args.traineeInput.Date_of_birth,
         Date_of_joining: args.traineeInput.Date_of_joining,
         Date_off_course_end:args.traineeInput. Date_off_course_end,
@@ -40,7 +61,7 @@ module.exports= {
         Passport_number: args.traineeInput.Passport_number,
         Technology: args.traineeInput.Technology,
         Course_fees: args.traineeInput.Course_fees,
-        } );
+        });
         return trainee.save().then(result => {
             console.log(result);
             return {...result._doc};
@@ -49,7 +70,7 @@ module.exports= {
             throw err;
         });
     },
-    createEmployee: (args) => {
+    createEmployee: (parent, args) => {
         const employee = new Employeeschema({
             EmployeeId: args.employeeInput.EmployeeId,
             Employee_name : args.employeeInput.Employee_name,
@@ -77,5 +98,34 @@ module.exports= {
             throw err;
         });
         
-    }        
-}
+    } ,
+
+
+
+    createProject: (parent,args) => {
+
+        console.log( args)
+        const project = new Projectschema({
+               projectName: args.pInput.projectName,
+                clientName: args.pInput.clientName,
+                selectType: args.pInput.selectType,
+                startDate: args.pInput.startDate,
+                EndDate: args.pInput.EndDate,
+                selectPriority: args.pInput.selectPriority,
+                selectTeamLead: args.pInput.selectTeamLead,
+                selectRate:args.pInput.selectRate,
+                selectTeam: args.pInput.selectTeam
+        });
+        return project.save().then(result =>{
+            console.log(result)
+            return {...result._doc};
+        }).catch(err =>{
+            throw err;
+        })
+        }
+
+
+
+},       
+};
+module.exports = {resolvers};

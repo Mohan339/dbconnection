@@ -1,31 +1,34 @@
 
 const express = require("express");
-const { graphqlHTTP } = require("express-graphql");
+const {ApolloServer, makeExecutableSchema,} = require("apollo-server-express");
+const{applyMiddleware} = require("graphql-middleware");
+const bodyParser = require("body-parser")
+const cors  = require("cors")
 
-const bodyParser  = require("body-parser");
+
+
 const mongoose = require("mongoose")
 
-const graphqlSchema = require("./graphql/schema/index");
-const graphqlResolver = require("./graphql/resolver/index")
-const app = express();
+const {typeDefs} = require("./graphql/schema/typeDefs");
+const {resolvers }= require("./graphql/resolver/resolvers")
 
+
+const app = express();
+app.use(cors());
 app.use(bodyParser.json());
 
-app.use("/graphql", 
-        graphqlHTTP({
-        schema: graphqlSchema,
-        rootValue:graphqlResolver ,
-        graphiql:true
-    })
-);
+const server = new ApolloServer({typeDefs, resolvers});
+const corsOption ={
+    origin:"http://localhost:3000", 
+    Crendentials: true
+}
+server.applyMiddleware({app, cors: false});
+
 mongoose.connect("mongodb+srv://logincred:passwd@cluster0.slvqd.mongodb.net/HRMS?retryWrites=true&w=majority",
-{useNewUrlParser : true, useUnifiedTopology : true}).then(res => {
-    const port = 2021;
-    app.listen(port, () =>{
+{useNewUrlParser : true, useUnifiedTopology : true})
+const port = 4000;
+app.listen(port, () =>{
         console.log("serve is up")
     })  
-}).catch(err => {
-    console.log("error")
-})
 
 
