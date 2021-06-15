@@ -5,40 +5,34 @@ const mongoose = require("mongoose")
 const projectschema = mongoose.Schema({
 
     projectName:{
-        type:String,
-        required:true
+        type:String
+        
     },
+    id:{
+        type:String
+    },    
     clientName:{
-        type:String, 
-        required: true
-    },
+        type:String  },
     selectType:{
-        type:String, 
-        required: true
+        type:String
     },
     startDate:{
-        type:String, 
-        required: true
+        type:String
     },
     EndDate:{
-        type:String, 
-        required: true
+        type:String
     },
     selectPriority:{
-        type:String, 
-        required: true
+        type:String
     },
     selectTeamLead:{
         type:String, 
         required: true
     },
     selectRate:{
-        type:String, 
-        required: true
-    },
+        type:String},
     selectTeam:{
-        type:String, 
-        required: true
+        type:String
     }
-})
+}, {timestamps:true})
 module.exports = mongoose.model("projects dbs", projectschema)

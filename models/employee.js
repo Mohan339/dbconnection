@@ -4,6 +4,7 @@ const Schema = mongoose.Schema
 
 
 const employeeSchema= new Schema({
+   
                 EmployeeId: {
                     type:String,
                     required: true
@@ -58,7 +59,9 @@ const employeeSchema= new Schema({
                 createdEmployees: {
                     type: Schema.Types.ObjectId,
                     ref: 'Trainees'
-                }
+                },
+},        {timestamps:true}
+               
     
-});
+);
 module.exports=mongoose.model("employees dbs", employeeSchema)

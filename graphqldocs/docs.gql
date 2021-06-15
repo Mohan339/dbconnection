@@ -1,0 +1,113 @@
+ 
+#  //mutation for create_project
+ 
+ mutation CREATE_PROJECT($projectName:String!,
+  $clientName:String!,
+$selectType:String!,
+  $startDate:String!,
+    $EndDate:String!,
+    $selectPriority:String!,  
+  $selectTeamLead:String!,
+    $selectRate:String!,
+    $selectTeam:String!,
+){
+  createProject(pInput:{projectName:$projectName,
+    clientName:$clientName, 
+  selectType:$selectType,startDate: $startDate, 
+    EndDate:$EndDate,
+    selectPriority: $selectPriority,
+    selectTeamLead: $selectTeamLead,
+  selectRate:$selectRate,selectTeam:$selectTeam}){
+    selectType
+  }
+}
+
+{
+  "projectName":"aonangod",
+  "clientName":"us",
+  "selectType":"hard",
+  "startDate":"4477474",
+  "EndDate":"83838",
+  "selectPriority":"highest",
+  "selectTeamLead":"ram",
+  "selectRate":"2000",
+  "selectTeam":"abdul"
+  
+}
+# //query for project details
+
+query{
+  projectDetails{
+    projectID,
+    projectName
+  }
+}
+
+
+mutation EDIT_POST_BYID($projectID:ID!, $updateproject:ProjectInput){
+  editByprojectID(updateproject:$updateproject,
+    								projectID:$projectID
+                    ){
+
+  	projectID,
+    projectName,
+    projectName
+  
+  }
+}
+
+{
+  "projectID": "002",
+  "updateproject": {
+    "projectId": "024",
+    "projectName": "this is new edited",
+    "clientName": "vijay kumaran",
+    "selectType": "easy",
+    "startDate": "00001",
+    "EndDate": "00002",
+    "selectPriority": "highest",
+    "selectTeamLead": "mohan",
+    "selectRate": "000022",
+    "selectTeam": "vija team"
+  }
+}
+
+#for editing project by id
+
+mutation EDIT_PROJECT_BYID($id:String, $updateproject:ProjectInput){
+  editByprojectID(id:$id,
+    updateproject:$updateproject  ){
+
+  	id,
+    projectName,
+    projectName
+  
+  }
+}
+# query variables
+{
+  "id": "1235",
+  "updateproject": {
+    "projectName": "changed to movie wud",
+    "clientName": "vk",
+    "selectType": "null",
+    "startDate": "null",
+    "EndDate": "null",
+    "selectPriority": "null",
+    "selectTeamLead": "mohan",
+    "selectRate": "000022",
+    "selectTeam": "vija team"
+  }
+}
+
+
+# it like checking projects under team lead
+query FILTERING($selectTeamLead:String){
+  projectHead(selectTeamLead:$selectTeamLead){
+    projectName
+  }
+}
+#query variables
+{
+  "selectTeamLead": "mohan"
+}

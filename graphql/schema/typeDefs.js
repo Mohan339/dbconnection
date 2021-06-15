@@ -41,27 +41,29 @@ const typeDefs = gql`
                 current_salary: String    
             }
             type Project{
-                projectName: String!
-                clientName: String!
-                selectType: String!
-                startDate: String!
-                EndDate: String!
-                selectPriority: String!
-                selectTeamLead: String!
-                selectRate:String!
-                selectTeam: String!
+                id: String
+                projectName: String
+                clientName: String
+                selectType: String
+                startDate: String
+                EndDate: String
+                selectPriority: String
+                selectTeamLead: String
+                selectRate:String
+                selectTeam: String
             }
 
             input ProjectInput{
-                projectName: String!
-                clientName: String!
-                selectType: String!
-                startDate: String!
-                EndDate: String!
-                selectPriority: String!
-                selectTeamLead: String!
-                selectRate:String!
-                selectTeam: String!
+                id: String
+                projectName: String
+                clientName: String
+                selectType: String
+                startDate: String
+                EndDate: String
+                selectPriority: String
+                selectTeamLead: String
+                selectRate:String
+                selectTeam: String
                    }   
 
 
@@ -101,19 +103,30 @@ const typeDefs = gql`
                 Technology: String
                 Course_fees: Float
                 }           
+                type projectStatus{
+                    id:String,
+                    message: String,
+                    success: Boolean
 
+                }
 
             type Query {               
                 traineeDetails: [Trainee]              
                 employeeDetails: [Employee]
                 projectDetails: [Project]
+                projectHead(selectTeamLead:String):[Project]
+
             }
 
             type Mutation {                
                 createTrainee(traineeInput: TraineeInput): Trainee
                 createEmployee(employeeInput: EmployeeInput): Employee
                 createProject(pInput: ProjectInput): Project
+                editByprojectID(updateproject: ProjectInput, id:String):Project
+                deleteproject(id:String):projectStatus
                 }
              
         `;
 module.exports = {typeDefs};
+
+
