@@ -1,7 +1,7 @@
 const Projectschema = require("../../models/projects");
 const Employeeschema = require("../../models/employee");
 const Traineeschema = require("../../models/trainee") ;
-
+const moongose = require("mongoose")
 
 const resolvers = {
     Query:{
@@ -37,6 +37,11 @@ const resolvers = {
          .catch(err =>{
              console.log(err);
          });
+         },
+         projectHead:async(parent,{selectTeamLead}) => {
+             let project= await Projectschema.find({selectTeamLead})
+             return project
+
          }
         
         
@@ -106,6 +111,7 @@ const resolvers = {
 
         console.log( args)
         const project = new Projectschema({
+                id: args.pInput.id,
                projectName: args.pInput.projectName,
                 clientName: args.pInput.clientName,
                 selectType: args.pInput.selectType,
@@ -118,13 +124,29 @@ const resolvers = {
         });
         return project.save().then(result =>{
             console.log(result)
-            return {...result._doc};
+            return {...result._doc, _id: result._doc._id.toString()};
         }).catch(err =>{
             throw err;
         })
+        },
+        // editByprojectID : async(parent,{id ,updateproject},{Projectschema} )=>{
+        //     console.log(updateproject)
+        //         let editedproject = await  new Projectschema.findByIdAndUpdate
+        //         return editedproject
+        // }
+
+        editByprojectID : async(parent, {updateproject,id})=>{
+            let edit = await Projectschema.findOneAndUpdate(id,{...updateproject})
+            return edit
+        },
+        deleteproject :async(parent, {id} ) =>{
+            let deleteone = await Projectschema.findOneAndDelete(id)
+            return{
+                id: deleteone.id,
+                message:"succesfully deleted one project",
+                success: true
+            }
         }
-
-
 
 },       
 };

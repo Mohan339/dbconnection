@@ -54,5 +54,5 @@ const traineeSchema= new Schema({
                     type: Schema.Types.ObjectId,
                     ref: 'Employees'
             }
-})
+},{timestamps:true})
 module.exports=mongoose.model("trainees dbs", traineeSchema)
