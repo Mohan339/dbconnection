@@ -20,6 +20,7 @@ const typeDefs = gql`
                 Passport_number: String
                 Technology: String
                 Course_fees: Float
+                trainee_Image:String
                }
 
             type Employee {
@@ -38,7 +39,13 @@ const typeDefs = gql`
                 No_of_years: String
                 Technology: String
                 Expiry_date_of_passport:String
-                current_salary: String    
+                current_salary: String 
+                employe_Image: String 
+                designation:String
+                description: String
+                Aadhar_Number: Int
+                passportNumber:Int
+                resume: String  
             }
             type Project{
                 id: String
@@ -84,6 +91,12 @@ const typeDefs = gql`
                 Technology: String
                 Expiry_date_of_passport:String
                 current_salary: String
+                employe_Image:String
+                designation:String
+                description: String
+                Aadhar_Number: Int
+                passportNumber:Int
+                resume: String
                
             }
 
@@ -102,6 +115,7 @@ const typeDefs = gql`
                 Passport_number: String
                 Technology: String
                 Course_fees: Float
+                trainee_Image:String
                 }           
                 type projectStatus{
                     id:String,
@@ -111,10 +125,11 @@ const typeDefs = gql`
                 }
 
             type Query {               
-                traineeDetails: [Trainee]              
+                traineeDetails: [Trainee]   
                 employeeDetails: [Employee]
                 projectDetails: [Project]
                 projectHead(selectTeamLead:String):[Project]
+                info:String
 
             }
 
@@ -124,6 +139,7 @@ const typeDefs = gql`
                 createProject(pInput: ProjectInput): Project
                 editByprojectID(updateproject: ProjectInput, id:String):Project
                 deleteproject(id:String):projectStatus
+                imgaeUploader(file: Upload):String
                 }
              
         `;

@@ -35,4 +35,4 @@ const projectschema = mongoose.Schema({
         type:String
     }
 }, {timestamps:true})
-module.exports = mongoose.model("projects dbs", projectschema)
+module.exports = mongoose.model("onandgoprojects", projectschema)

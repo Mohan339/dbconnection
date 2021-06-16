@@ -50,9 +50,11 @@ const traineeSchema= new Schema({
             Course_fees: {
                 type:Number,
             },
-            createdTrainees: {
-                    type: Schema.Types.ObjectId,
-                    ref: 'Employees'
+            trainee_Image:{
+                type: String
             }
+            
+           
+
 },{timestamps:true})
-module.exports=mongoose.model("trainees dbs", traineeSchema)
+module.exports=mongoose.model("onandgotrainee", traineeSchema)

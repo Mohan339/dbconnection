@@ -1,7 +1,11 @@
 const Projectschema = require("../../models/projects");
 const Employeeschema = require("../../models/employee");
 const Traineeschema = require("../../models/trainee") ;
-const moongose = require("mongoose")
+
+const {join, parse} = require("path")
+const {createWriteStream,createReadStream}=  require("fs")
+const moongose = require("mongoose");
+const { Stream } = require("stream");
 
 const resolvers = {
     Query:{
@@ -42,6 +46,9 @@ const resolvers = {
              let project= await Projectschema.find({selectTeamLead})
              return project
 
+         },
+         info :() =>{
+             return "im image uploader"
          }
         
         
@@ -66,6 +73,7 @@ const resolvers = {
         Passport_number: args.traineeInput.Passport_number,
         Technology: args.traineeInput.Technology,
         Course_fees: args.traineeInput.Course_fees,
+        trainee_Image:args.traineeInput.trainee_Image
         });
         return trainee.save().then(result => {
             console.log(result);
@@ -92,7 +100,13 @@ const resolvers = {
             No_of_years : args.employeeInput.No_of_years,
             Technology : args.employeeInput.Technology,
             Expiry_date_of_passport :args.employeeInput.Expiry_date_of_passport,
-            current_salary: args.employeeInput.current_salary
+            current_salary: args.employeeInput.current_salary,
+            employe_Image:args.employeeInput.employe_Image,
+                designation:args.employeeInput.designation,
+                description: args.employeeInput.description,
+                Aadhar_Number: args.employeeInput.Aadhar_Number,
+                passportNumber:args.employeeInput.passportNumber,
+                resume: args.employeeInput.resume
            
         });
          return employee.save().then(result => {
@@ -146,8 +160,25 @@ const resolvers = {
                 message:"succesfully deleted one project",
                 success: true
             }
-        }
+        },
+        imgaeUploader :async(parent, {file})=>{
+            let {filename, createReadStream} = await file
+            let stream = createReadStream();
+            let {
+                ext, 
+                name, }=parse(filename);
 
+            name = name.replace(/([^a-z0-9 ]+)/gi, '-').replace(' ','_')
+            let serverFile = join(__dirname, `../../uploads/${name}-${Date.now()}${ext}`)
+
+            let writeStream = await createWriteStream(serverFile);
+            await stream.pipe(writeStream);
+
+            let url ="http://localhost:4000"
+            serverFile =`${url}${serverFile.split('uploads')[1]}`
+            console.log(serverFile)
+            return serverFile
+       
 },       
-};
+},}
 module.exports = {resolvers};

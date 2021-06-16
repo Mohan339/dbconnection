@@ -50,6 +50,7 @@ const employeeSchema= new Schema({
                 Technology : {
                     type:String,
                 },
+                
                 Expiry_date_of_passport: {
                     type:String,
                 },
@@ -58,10 +59,27 @@ const employeeSchema= new Schema({
                 },
                 createdEmployees: {
                     type: Schema.Types.ObjectId,
-                    ref: 'Trainees'
+                    ref: 'onandgotrainee'
                 },
-},        {timestamps:true}
-               
+                employe_Image:{
+                    type:String
+                },
+                designation:{
+                    type:String,
+                },
+                description:{
+                    type:String,
+                },
+                Aadhar_Number:{
+                    type: Number
+                },
+                passportNumber:{
+                        type:Number
+                },
+                resume:{
+                    type: String
+                }
+},        {timestamps:true},     
     
 );
-module.exports=mongoose.model("employees dbs", employeeSchema)
+module.exports=mongoose.model("onandgoemployee", employeeSchema)
