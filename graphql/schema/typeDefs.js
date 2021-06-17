@@ -123,6 +123,60 @@ const typeDefs = gql`
                     success: Boolean
 
                 }
+               type Client{
+                ClientId: String!
+                Clientname: String!
+                CompanyName: String!
+                Designation: String
+                PhoneNoCC: Int
+                EmailId: String!
+                PanCardNo: String
+                GstNo: String                           
+                ClientURL: String
+                Description: String
+                PINcode: String 
+                ClientImage: String
+               }
+               input ClientInput{
+                ClientId: String!
+                Clientname: String!
+                CompanyName: String!
+                Designation: String
+                PhoneNoCC: Int
+                EmailId: String!
+                PanCardNo: String
+                GstNo: String                           
+                ClientURL: String
+                Description: String
+                PINcode: String 
+                ClientImage: String
+               }
+               
+               type PreClient{
+                PreClientId: String!
+                Contactname: String!
+                CompanyName: String
+                Designation: String
+                PhoneNoCC: Int
+                EmailId: String!         
+                ClientURL: String
+                Description: String
+                Country: String
+                PreclientImage: String 
+               }
+               input PreClientInput{
+                PreClientId: String!
+                Contactname: String!
+                CompanyName: String
+                Designation: String
+                PhoneNoCC: Int
+                EmailId: String!         
+                ClientURL: String
+                Description: String
+                Country: String
+                PreclientImage: String
+               }
+
 
             type Query {               
                 traineeDetails: [Trainee]   
@@ -130,17 +184,20 @@ const typeDefs = gql`
                 projectDetails: [Project]
                 projectHead(selectTeamLead:String):[Project]
                 info:String
+                clientDetails:[Client]
+                preClientDetails: [PreClient]
                
             },
             scalar Upload,
-            type Mutation {  
-                            
+            type Mutation {              
                 createTrainee(traineeInput: TraineeInput): Trainee
                 createEmployee(employeeInput: EmployeeInput): Employee
                 createProject(pInput: ProjectInput): Project
                 editByprojectID(updateproject: ProjectInput, id:String):Project
                 deleteproject(id:String):projectStatus
-                imgaeUploader(file:Upload):String
+                imageUploader(file:Upload):String
+                createClient(clientInput: ClientInput): Client
+                createPreClient(pCInput: PreClientInput):PreClient
                 }
              
         `;
