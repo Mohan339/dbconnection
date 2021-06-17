@@ -1,6 +1,6 @@
 
 const {gql} = require("apollo-server-express")
-
+const  {GraphQLUpload} = require("graphql-upload");
 
 
 const typeDefs = gql`
@@ -130,16 +130,17 @@ const typeDefs = gql`
                 projectDetails: [Project]
                 projectHead(selectTeamLead:String):[Project]
                 info:String
-
-            }
-
-            type Mutation {                
+               
+            },
+            scalar Upload,
+            type Mutation {  
+                            
                 createTrainee(traineeInput: TraineeInput): Trainee
                 createEmployee(employeeInput: EmployeeInput): Employee
                 createProject(pInput: ProjectInput): Project
                 editByprojectID(updateproject: ProjectInput, id:String):Project
                 deleteproject(id:String):projectStatus
-                imgaeUploader(file: Upload):String
+                imgaeUploader(file:Upload):String
                 }
              
         `;

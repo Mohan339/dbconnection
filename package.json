@@ -17,9 +17,15 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-graphql": "^0.12.0",
+    "fs-capacitor": "^2.0.4",
     "graphql": "^15.5.0",
     "graphql-middleware": "^6.0.10",
+    "graphql-upload": "^12.0.0",
     "mongoose": "^5.12.12",
     "nodemon": "^2.0.7"
+  },
+  "resolutions": {
+    "fs-capacitor": "^6.2.0",
+    "graphql-upload": "^11.0.0"
   }
 }
