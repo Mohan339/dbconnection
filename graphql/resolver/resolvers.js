@@ -1,6 +1,8 @@
 const Projectschema = require("../../models/projects");
 const Employeeschema = require("../../models/employee");
 const Traineeschema = require("../../models/trainee") ;
+const ClientSchema = require("../../models/client");
+const PreClientSchema = require("../../models/pre-client");
 
 const {join, parse} = require("path")
 const {createWriteStream}=  require("fs")
@@ -50,7 +52,14 @@ const resolvers = {
          },
          info :() =>{
              return "im image uploader"
-         }
+         }, 
+         
+    clientDetails: ()=>{
+             return ClientSchema.find()
+         },
+    preClientDetails: ()=>{
+            return PreClientSchema.find()
+        }
         
         
            
@@ -119,36 +128,10 @@ const resolvers = {
         });
         
     } ,
-
-
-
-    createProject: (parent,args) => {
-
-        console.log( args)
-        const project = new Projectschema({
-                id: args.pInput.id,
-               projectName: args.pInput.projectName,
-                clientName: args.pInput.clientName,
-                selectType: args.pInput.selectType,
-                startDate: args.pInput.startDate,
-                EndDate: args.pInput.EndDate,
-                selectPriority: args.pInput.selectPriority,
-                selectTeamLead: args.pInput.selectTeamLead,
-                selectRate:args.pInput.selectRate,
-                selectTeam: args.pInput.selectTeam
-        });
-        return project.save().then(result =>{
-            console.log(result)
-            return {...result._doc, _id: result._doc._id.toString()};
-        }).catch(err =>{
-            throw err;
-        })
-        },
-        // editByprojectID : async(parent,{id ,updateproject},{Projectschema} )=>{
-        //     console.log(updateproject)
-        //         let editedproject = await  new Projectschema.findByIdAndUpdate
-        //         return editedproject
-        // }
+       createProject: async(parent,args) => {
+            let result = await Projectschema.create(args.pInput)
+            return result
+    },
 
         editByprojectID : async(parent, {updateproject,id})=>{
             let edit = await Projectschema.findOneAndUpdate(id,{...updateproject})
@@ -163,12 +146,11 @@ const resolvers = {
             }
         },
         
-        imgaeUploader :async(parent, {file})=>{
+        imageUploader :async(parent, {file})=>{
             let {filename, createReadStream} = await file
             let stream = createReadStream();
-            let {
-                ext, 
-                name, }=parse(filename);
+            
+            let {ext,name, }=parse(filename);
 
             name = name.replace(/([^a-z0-9 ]+)/gi, '-').replace(' ','_')
             let serverFile = join(__dirname, `../../uploads/${name}-${Date.now()}${ext}`)
@@ -181,6 +163,16 @@ const resolvers = {
             console.log(serverFile)
             return serverFile
        
-},       
+        },
+        createClient:  async(parent,args) => {
+            let result = await ClientSchema.create(args.clientInput)
+            return result     
+        },
+        createPreClient:  async(parent,args) => {
+            let result = await PreClientSchema.create(args.pCInput)
+            return result     
+        },
+            
 },}
+
 module.exports = {resolvers};
