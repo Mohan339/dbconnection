@@ -1,16 +1,11 @@
 
 const express = require("express");
 const {ApolloServer} = require("apollo-server-express");
-
-
-
+const {  graphqlUploadExpress } = require('graphql-upload');
 const cors  = require("cors")
 const {join} = require("path")
-
-
-
-
 const mongoose = require("mongoose")
+
 
 const {typeDefs} = require("./graphql/schema/typeDefs");
 const {resolvers}= require("./graphql/resolver/resolvers");
@@ -22,7 +17,7 @@ const corsOption ={
 }
 
 const app = express();
-app.use(express.static(join(__dirname,'./uploads' )))
+
 
 
 
@@ -31,10 +26,12 @@ app.use(cors());
 
 
 const server = new ApolloServer(
-   {typeDefs, resolvers}
+   {    uploads:false,
+       typeDefs, resolvers}
 
     );
-
+app.use(graphqlUploadExpress())
+app.use(express.static(join(__dirname,'./uploads' )))
 
 server.applyMiddleware({app,cors:false});
 

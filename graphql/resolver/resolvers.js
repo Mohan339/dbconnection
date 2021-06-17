@@ -3,9 +3,10 @@ const Employeeschema = require("../../models/employee");
 const Traineeschema = require("../../models/trainee") ;
 
 const {join, parse} = require("path")
-const {createWriteStream,createReadStream}=  require("fs")
+const {createWriteStream}=  require("fs")
 const moongose = require("mongoose");
 const { Stream } = require("stream");
+const {GraphQLUpload} = require("graphql-upload")
 
 const resolvers = {
     Query:{
@@ -54,7 +55,7 @@ const resolvers = {
         
            
     },
-
+    Upload:GraphQLUpload,
     Mutation:{
 
     createTrainee: (parent, args) => {
@@ -161,6 +162,7 @@ const resolvers = {
                 success: true
             }
         },
+        
         imgaeUploader :async(parent, {file})=>{
             let {filename, createReadStream} = await file
             let stream = createReadStream();
@@ -175,7 +177,7 @@ const resolvers = {
             await stream.pipe(writeStream);
 
             let url ="http://localhost:4000"
-            serverFile =`${url}${serverFile.split('uploads')[1]}`
+            serverFile =`${url}/${serverFile.split('uploads')[1]}`
             console.log(serverFile)
             return serverFile
        
