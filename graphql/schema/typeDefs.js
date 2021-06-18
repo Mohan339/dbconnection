@@ -21,6 +21,7 @@ const typeDefs = gql`
                 Technology: String
                 Course_fees: Float
                 trainee_Image:String
+
                }
 
             type Employee {
@@ -45,9 +46,12 @@ const typeDefs = gql`
                 description: String
                 Aadhar_Number: Int
                 passportNumber:Int
-                resume: String  
+                resume: String 
+                clients: Client!
+               
             }
             type Project{
+                client: Client
                 id: String
                 projectName: String
                 clientName: String
@@ -57,7 +61,9 @@ const typeDefs = gql`
                 selectPriority: String
                 selectTeamLead: String
                 selectRate:String
-                selectTeam: String
+                selectTeam: String             
+                ClientDetials: Client         #for fetching single client details
+              
             }
 
             input ProjectInput{
@@ -97,7 +103,7 @@ const typeDefs = gql`
                 Aadhar_Number: Int
                 passportNumber:Int
                 resume: String
-               
+                
             }
 
             input TraineeInput{
@@ -124,6 +130,7 @@ const typeDefs = gql`
 
                 }
                type Client{
+                projects:[Project]
                 ClientId: String!
                 Clientname: String!
                 CompanyName: String!
@@ -136,6 +143,10 @@ const typeDefs = gql`
                 Description: String
                 PINcode: String 
                 ClientImage: String
+                Employee_name: String 
+                employees: Employee
+                ProjectsName:[String]            #common name b/w cl and project
+                WorkingProject:[Project]         #for fetching project details
                }
                input ClientInput{
                 ClientId: String!
@@ -150,6 +161,8 @@ const typeDefs = gql`
                 Description: String
                 PINcode: String 
                 ClientImage: String
+                Employee_name:String
+                ProjectsName:[String] 
                }
                
                type PreClient{
@@ -186,6 +199,9 @@ const typeDefs = gql`
                 info:String
                 clientDetails:[Client]
                 preClientDetails: [PreClient]
+                
+                client(Clientname: String):Client          #203 and 204 are new 
+                project(projectName: String):Project
                
             },
             scalar Upload,
@@ -196,7 +212,7 @@ const typeDefs = gql`
                 editByprojectID(updateproject: ProjectInput, id:String):Project
                 deleteproject(id:String):projectStatus
                 imageUploader(file:Upload):String
-                createClient(clientInput: ClientInput): Client
+                createClient(clientInput: ClientInput): Client                      
                 createPreClient(pCInput: PreClientInput):PreClient
                 }
              

@@ -78,7 +78,11 @@ const employeeSchema= new Schema({
                 },
                 resume:{
                     type: String
-                }
+                },
+                clients:{
+                    type: Schema.Types.String,
+                    ref:'onandgoclients'
+                  }
 },        {timestamps:true},     
     
 );

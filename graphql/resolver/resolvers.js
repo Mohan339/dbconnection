@@ -10,6 +10,34 @@ const moongose = require("mongoose");
 const { Stream } = require("stream");
 const {GraphQLUpload} = require("graphql-upload")
 
+const employee = (employee_name)=>{
+    return Employeeschema.find(employee_name)
+    .then((employee) => {
+        return {...employee._doc,
+            Employee_name: employee.employee_name,
+             clients: client.bind(this, employee._doc.createdEvents)}
+    })
+    .catch(err => {
+        throw err;
+    })
+}
+
+const client = (employee_name) =>{
+    return ClientSchema.find(employee_name)
+    .then((client) => {
+        return client.map(cli=>{
+            return {...cli._doc,
+                Employee_name: cli.employee_name, 
+                employees : employee.bind(this, cli.employees )
+            };
+        }) ;
+    })
+    .catch(err => {
+        throw err;
+    })
+}
+
+
 const resolvers = {
     Query:{
     traineeDetails: () =>{
@@ -22,23 +50,31 @@ const resolvers = {
             console.log(err);
         });
     },
- 
-    employeeDetails: ()=> {
-        return Employeeschema.find()
-            .then(employeeDetails => {
-            return employeeDetails.map(employee => {
-                return { ...employee._doc };
-            });
-        })
-        .catch(err=>{
-            console.log(err);
-        });
+    employeeDetails:async()=>{
+        let emp = await Employeeschema.find().populate('clients')
+        return emp
     },
+    // employeeDetails: ()=> {
+    //     return Employeeschema.find()
+    //         .then(employeeDetails => {
+    //         return employeeDetails.map(employee => {
+    //             return { ...employee._doc, 
+    //                 Employee_name: employee.Employee_name, 
+    //                 clients: client.bind(this, employee._doc.clients) };
+    //         });
+    //     })
+    //     .catch(err=>{
+    //         console.log(err);
+    //     });
+    // },
      projectDetails: () => {
     
-             return Projectschema.find().then(projectDetails =>{
+             return Projectschema.find()
+           
+             .then(projectDetails =>{
                return projectDetails.map(x => {
-                 return { ...x._doc };
+                 return { ...x._doc,                           
+                 };
              });
             })
          .catch(err =>{
@@ -48,8 +84,13 @@ const resolvers = {
          projectHead:async(parent,{selectTeamLead}) => {
              let project= await Projectschema.find({selectTeamLead})
              return project
-
+        
          },
+        // project:async(parent,{projectName})=>{
+        //     let name = await Projectschema.findOne({projectName})
+        //     return name
+           
+        // },
          info :() =>{
              return "im image uploader"
          }, 
@@ -59,12 +100,24 @@ const resolvers = {
          },
     preClientDetails: ()=>{
             return PreClientSchema.find()
-        }
+        },
+     
+        client:async(parent,{Clientname})=>{
+                let name = await ClientSchema.findOne({Clientname})
+                return name
+        },
+        project:async(parent,{projectName} )=>{
+                let pname= await Projectschema.findOne({projectName})
+                return pname
+        },
         
-        
-           
+       
     },
+   
+
     Upload:GraphQLUpload,
+
+
     Mutation:{
 
     createTrainee: (parent, args) => {
@@ -93,57 +146,77 @@ const resolvers = {
             throw err;
         });
     },
-    createEmployee: (parent, args) => {
-        const employee = new Employeeschema({
-            EmployeeId: args.employeeInput.EmployeeId,
-            Employee_name : args.employeeInput.Employee_name,
-            Date_of_birth:args.employeeInput.Date_of_birth,
-            Date_of_joining: args.employeeInput. Date_of_joining,
-            Date_off_course_end: args.employeeInput.Date_off_course_end,
-            Education: args.employeeInput.Education,
-            Phone_number: args.employeeInput.Phone_number,
-            Email_ID: args.employeeInput.Email_ID,
-            PAN_card_number: args.employeeInput.PAN_card_number,
-            Department_looking_for_Freshers:args.employeeInput.Department_looking_for_Freshers, 
-            Company_name :args.employeeInput.Company_name,
-            Related_files: args.employeeInput.Related_files,
-            No_of_years : args.employeeInput.No_of_years,
-            Technology : args.employeeInput.Technology,
-            Expiry_date_of_passport :args.employeeInput.Expiry_date_of_passport,
-            current_salary: args.employeeInput.current_salary,
-            employe_Image:args.employeeInput.employe_Image,
-                designation:args.employeeInput.designation,
-                description: args.employeeInput.description,
-                Aadhar_Number: args.employeeInput.Aadhar_Number,
-                passportNumber:args.employeeInput.passportNumber,
-                resume: args.employeeInput.resume
+    // createEmployee: (parent, args) => {
+    //     const employee = new Employeeschema({
+    //         EmployeeId: args.employeeInput.EmployeeId,
+    //         Employee_name : args.employeeInput.Employee_name,
+    //         Date_of_birth:args.employeeInput.Date_of_birth,
+    //         Date_of_joining: args.employeeInput. Date_of_joining,
+    //         Date_off_course_end: args.employeeInput.Date_off_course_end,
+    //         Education: args.employeeInput.Education,
+    //         Phone_number: args.employeeInput.Phone_number,
+    //         Email_ID: args.employeeInput.Email_ID,
+    //         PAN_card_number: args.employeeInput.PAN_card_number,
+    //         Department_looking_for_Freshers:args.employeeInput.Department_looking_for_Freshers, 
+    //         Company_name :args.employeeInput.Company_name,
+    //         Related_files: args.employeeInput.Related_files,
+    //         No_of_years : args.employeeInput.No_of_years,
+    //         Technology : args.employeeInput.Technology,
+    //         Expiry_date_of_passport :args.employeeInput.Expiry_date_of_passport,
+    //         current_salary: args.employeeInput.current_salary,
+    //         employe_Image:args.employeeInput.employe_Image,
+    //         designation:args.employeeInput.designation,
+    //         description: args.employeeInput.description,
+    //         Aadhar_Number: args.employeeInput.Aadhar_Number,
+    //         passportNumber:args.employeeInput.passportNumber,
+    //         resume: args.employeeInput.resume,
+    //         clients : args.employeeInput.Employee_name
+               
            
-        });
-         return employee.save().then(result => {
-            console.log(result);
-            return {...result._doc};
-        }).catch(err=> {
-            console.log(err);
-            throw err;
-        });
+    //     });
+    //     let createdEmp;
+    //     return employee.save()
+    //      .then(result => {
+    //         createdEmp = {...result._doc}
+    //         console.log(result);
+    //         return ClientSchema.find(employees)
+    //     })
+    //     .then(client => {
+    //         client.employees.push(employee);
+    //         return client.save();
+    //     })
+    //     .then(result =>{
+    //             return createdEmp;  
+    //         }
+    //     ).catch(err=> {
+    //         console.log(err);
+    //         throw err;
+    //     });
         
-    } ,
-       createProject: async(parent,args) => {
+    // } ,
+    
+        createEmployee:async(parent, args)=>{
+            let result = await Employeeschema.create(args.employeeInput)
+            return result
+        },
+
+        createProject: async(parent,args) => {
             let result = await Projectschema.create(args.pInput)
             return result
-    },
+        },
 
         editByprojectID : async(parent, {updateproject,id})=>{
             let edit = await Projectschema.findOneAndUpdate(id,{...updateproject})
             return edit
         },
+
         deleteproject :async(parent, {id} ) =>{
             let deleteone = await Projectschema.findOneAndDelete(id)
             return{
                 id: deleteone.id,
                 message:"succesfully deleted one project",
                 success: true
-            }
+                  }
         },
         
         imageUploader :async(parent, {file})=>{
@@ -164,15 +237,40 @@ const resolvers = {
             return serverFile
        
         },
+
         createClient:  async(parent,args) => {
             let result = await ClientSchema.create(args.clientInput)
             return result     
         },
+
         createPreClient:  async(parent,args) => {
             let result = await PreClientSchema.create(args.pCInput)
             return result     
         },
             
-},}
+},
+
+
+
+
+Project:{
+    client:(parent) =>{
+   ClientSchema.find(({Clientname})=>parent.projectName === Clientname)
+    }
+},
+Client: {
+    projects(parent) {
+      
+      const client = Projectschema.find(({ Clientname }) =>{
+        parent.ProjectsName.includes(Clientname)}
+      );
+      return client;
+    },},
+
+
+
+
+
+}
 
 module.exports = {resolvers};
