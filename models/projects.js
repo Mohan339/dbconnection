@@ -1,8 +1,8 @@
 const mongoose = require("mongoose")
 
+const Schema = mongoose.Schema
 
-
-const projectschema = mongoose.Schema({
+const projectschema =  new Schema({
 
     projectName:{
         type:String
@@ -12,7 +12,8 @@ const projectschema = mongoose.Schema({
         type:String
     },    
     clientName:{
-        type:String  },
+        type:String 
+     },
     selectType:{
         type:String
     },
@@ -33,6 +34,10 @@ const projectschema = mongoose.Schema({
         type:String},
     selectTeam:{
         type:String
+    },
+    ClientDetials:{
+        type: Schema.Types.String,
+        ref:  "onandgoclients"
     }
 }, {timestamps:true})
 module.exports = mongoose.model("onandgoprojects", projectschema)

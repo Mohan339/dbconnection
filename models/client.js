@@ -49,8 +49,22 @@ const ClientSchema = new Schema({
     },
     ClientImage:{
         type: String
-    }
-
+    },
+    ProjectsName: [{
+        type:String
+    }],
+    Employee_name:{
+         type:String
+    },
+    employees:{
+        type: Schema.Types.String,
+        ref: 'onandgoemployee'
+    },
+    WorkingProject:[{
+        type: Schema.Types.String,
+        ref:"onandgoprojects"
+    }]
+    
 });
 
 module.exports = mongoose.model("onandgoclients", ClientSchema)
