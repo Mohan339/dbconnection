@@ -105,6 +105,12 @@ const typeDefs = gql`
                 resume: String
                 
             }
+            type Status{
+                   name: String
+                    message: String
+                    success: Boolean
+
+                }
 
             input TraineeInput{
                 TraineeId: String!
@@ -124,8 +130,8 @@ const typeDefs = gql`
                 trainee_Image:String
                 }           
                 type projectStatus{
-                    id:String,
-                    message: String,
+                    id:String
+                    message: String
                     success: Boolean
 
                 }
@@ -207,11 +213,19 @@ const typeDefs = gql`
             scalar Upload,
             type Mutation {              
                 createTrainee(traineeInput: TraineeInput): Trainee
+                editTraineeById(UpdateTrainee: TraineeInput,TraineeId:String): Trainee
+                deleteTraineeById(TraineeId:String):Status   
+
                 createEmployee(employeeInput: EmployeeInput): Employee
+                editEmployeeByID(updateEmployee: EmployeeInput, Employee_name:String):Employee
+                deleteEmployeeByID(Employee_name:String):Status
+
                 createProject(pInput: ProjectInput): Project
                 editByprojectID(updateproject: ProjectInput, id:String):Project
                 deleteproject(id:String):projectStatus
+
                 imageUploader(file:Upload):String
+                
                 createClient(clientInput: ClientInput): Client                      
                 createPreClient(pCInput: PreClientInput):PreClient
                 }
