@@ -205,11 +205,39 @@ const resolvers = {
             return result
         },
 
+        editTraineeById: async(parent, {UpdateTrainee,TraineeId})=>{
+            let editTraine = await Traineeschema.findOneAndUpdate(TraineeId,
+                {...UpdateTrainee})
+            return editTraine
+        },
+        deleteTraineeById:async(parent,{TraineeId})=>{
+         
+            let deleteTraine = await Traineeschema.findOneAndDelete(TraineeId)
+            return{
+                name:deleteTraine.TraineeId,
+                message:"deleted Trainee successfully",
+                success:true }
+         
+        },
+        editEmployeeByID: async(parent,{updateEmployee,Employee_name})=>{
+                let empEdit= await Employeeschema.findOneAndUpdate(Employee_name,
+                    {...updateEmployee, new:true})
+                return empEdit
+                },
+        deleteEmployeeByID:async(parent,{Employee_name})=>{
+                let deleteemp = await Employeeschema.findOneAndDelete(Employee_name)
+                return {
+                    name: deleteemp.Employee_name,
+                    message:"successfull deleted employee",
+                    success: true
+                }
+        },
         editByprojectID : async(parent, {updateproject,id})=>{
             let edit = await Projectschema.findOneAndUpdate(id,{...updateproject})
             return edit
         },
-
+        
+         
         deleteproject :async(parent, {id} ) =>{
             let deleteone = await Projectschema.findOneAndDelete(id)
             return{
@@ -253,19 +281,19 @@ const resolvers = {
 
 
 
-Project:{
-    client:(parent) =>{
-   ClientSchema.find(({Clientname})=>parent.projectName === Clientname)
-    }
-},
-Client: {
-    projects(parent) {
-      
-      const client = Projectschema.find(({ Clientname }) =>{
-        parent.ProjectsName.includes(Clientname)}
-      );
-      return client;
-    },},
+        Project:{
+            client:(parent) =>{
+        ClientSchema.find(({Clientname})=>parent.projectName === Clientname)
+            }
+        },
+        Client: {
+            projects(parent) {
+            
+            const client = Projectschema.find(({ Clientname }) =>{
+                parent.ProjectsName.includes(Clientname)}
+            );
+            return client;
+            },},
 
 
 
