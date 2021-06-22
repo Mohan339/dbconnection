@@ -3,13 +3,17 @@ const Employeeschema = require("../../models/employee");
 const Traineeschema = require("../../models/trainee") ;
 const ClientSchema = require("../../models/client");
 const PreClientSchema = require("../../models/pre-client");
-
+const {_} = require("lodash")
 const {join, parse} = require("path")
 const {createWriteStream}=  require("fs")
 const moongose = require("mongoose");
 const { Stream } = require("stream");
-const {GraphQLUpload} = require("graphql-upload")
+const {GraphQLUpload} = require("graphql-upload");
+const projects = require("../../models/projects");
 
+
+
+// custom resolvers defind vijay
 const employee = (employee_name)=>{
     return Employeeschema.find(employee_name)
     .then((employee) => {
@@ -51,7 +55,7 @@ const resolvers = {
         });
     },
     employeeDetails:async()=>{
-        let emp = await Employeeschema.find().populate('clients')
+        let emp = await Employeeschema.find()
         return emp
     },
     // employeeDetails: ()=> {
@@ -109,6 +113,14 @@ const resolvers = {
         project:async(parent,{projectName} )=>{
                 let pname= await Projectschema.findOne({projectName})
                 return pname
+        },
+        projectRelClient:async(parent,{clientName})=>{
+            let cname = await Projectschema.findOne({clientName})
+            return cname
+        },
+        clientRelProject:async(parent,{ProjectsName})=>{
+            let pname = await ClientSchema.findOne({ProjectsName})
+            return pname
         },
         
        
@@ -201,18 +213,18 @@ const resolvers = {
         },
 
         createProject: async(parent,args) => {
-            let result = await Projectschema.create(args.pInput)
+            let result = await Projectschema.create(args.pInput,client)            
             return result
         },
 
         editTraineeById: async(parent, {UpdateTrainee,TraineeId})=>{
-            let editTraine = await Traineeschema.findOneAndUpdate(TraineeId,
-                {...UpdateTrainee})
+            const query = {TraineeId:TraineeId}
+            let editTraine = await Traineeschema.findOneAndUpdate(query,{...UpdateTrainee})
             return editTraine
         },
         deleteTraineeById:async(parent,{TraineeId})=>{
          
-            let deleteTraine = await Traineeschema.findOneAndDelete(TraineeId)
+            let deleteTraine = await Traineeschema.findOneAndDelete({TraineeId:TraineeId})
             return{
                 name:deleteTraine.TraineeId,
                 message:"deleted Trainee successfully",
@@ -220,12 +232,13 @@ const resolvers = {
          
         },
         editEmployeeByID: async(parent,{updateEmployee,Employee_name})=>{
-                let empEdit= await Employeeschema.findOneAndUpdate(Employee_name,
+            let query = {Employee_name:Employee_name}
+                let empEdit= await Employeeschema.findOneAndUpdate(query,
                     {...updateEmployee, new:true})
                 return empEdit
                 },
         deleteEmployeeByID:async(parent,{Employee_name})=>{
-                let deleteemp = await Employeeschema.findOneAndDelete(Employee_name)
+                let deleteemp = await Employeeschema.findOneAndDelete({Employee_name:Employee_name})
                 return {
                     name: deleteemp.Employee_name,
                     message:"successfull deleted employee",
@@ -233,13 +246,14 @@ const resolvers = {
                 }
         },
         editByprojectID : async(parent, {updateproject,id})=>{
-            let edit = await Projectschema.findOneAndUpdate(id,{...updateproject})
+            let query = {id:id}
+            let edit = await Projectschema.findOneAndUpdate(query,{...updateproject})
             return edit
         },
         
          
         deleteproject :async(parent, {id} ) =>{
-            let deleteone = await Projectschema.findOneAndDelete(id)
+            let deleteone = await Projectschema.findOneAndDelete({id:id})
             return{
                 id: deleteone.id,
                 message:"succesfully deleted one project",
@@ -279,21 +293,23 @@ const resolvers = {
 },
 
 
-
+// custom resolver 
 
         Project:{
-            client:(parent) =>{
-        ClientSchema.find(({Clientname})=>parent.projectName === Clientname)
+            client(u){
+                return  ClientSchema.findOne({Clientname:u.clientName})
+        
+        },
+    },
+        Client: {                        
+            projects(parent,args,context){
+               let ProjectsName =args
+    
+                let resultproject = ClientSchema.filter((a)=> ProjectsName.includes(a.projectName))
+                return resultproject
+            
             }
         },
-        Client: {
-            projects(parent) {
-            
-            const client = Projectschema.find(({ Clientname }) =>{
-                parent.ProjectsName.includes(Clientname)}
-            );
-            return client;
-            },},
 
 
 

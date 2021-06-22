@@ -1,4 +1,4 @@
- 
+http://localhost:4000//menImage-1623919770541.jpg" 
 #  //mutation for create_project
  
  mutation CREATE_PROJECT($projectName:String!,
@@ -111,3 +111,9 @@ query FILTERING($selectTeamLead:String){
 {
   "selectTeamLead": "mohan"
 }
+
+
+
+
+
+

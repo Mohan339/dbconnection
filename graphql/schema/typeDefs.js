@@ -206,8 +206,10 @@ const typeDefs = gql`
                 clientDetails:[Client]
                 preClientDetails: [PreClient]
                 
-                client(Clientname: String):Client          #203 and 204 are new 
+                client(Clientname: String):Client          #209 and 210 see this , realtion
                 project(projectName: String):Project
+                projectRelClient(clientName: String): Project
+                clientRelProject(ProjectsName:String):Client
                
             },
             scalar Upload,
