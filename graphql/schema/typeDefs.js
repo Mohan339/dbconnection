@@ -208,7 +208,7 @@ const typeDefs = gql`
                 
                 client(Clientname: String):Client          #209 and 210 see this , realtion
                 project(projectName: String):Project
-                projectRelClient(clientName: String): Project
+                projectRelClient(clientName: String): [Project]
                 clientRelProject(ProjectsName:String):Client
                
             },

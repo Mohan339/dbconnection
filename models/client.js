@@ -61,7 +61,7 @@ const ClientSchema = new Schema({
         ref: 'onandgoemployee'
     },
     WorkingProject:[{
-        type: Schema.Types.String,
+        type: Schema.Types.Array,
         ref:"onandgoprojects"
     }]
     

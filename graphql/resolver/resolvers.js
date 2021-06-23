@@ -53,7 +53,8 @@ const resolvers = {
         .catch(err=>{
             console.log(err);
         });
-    },
+        },
+
     employeeDetails:async()=>{
         let emp = await Employeeschema.find()
         return emp
@@ -71,31 +72,33 @@ const resolvers = {
     //         console.log(err);
     //     });
     // },
-     projectDetails: () => {
+     
+    projectDetails: () => {
     
              return Projectschema.find()
            
-             .then(projectDetails =>{
+            .then(projectDetails =>{
                return projectDetails.map(x => {
-                 return { ...x._doc,                           
-                 };
-             });
-            })
-         .catch(err =>{
+                  return { ...x._doc,                           
+                  };
+                 });
+                })
+            .catch(err =>{
              console.log(err);
          });
          },
-         projectHead:async(parent,{selectTeamLead}) => {
+         
+    projectHead:async(parent,{selectTeamLead}) => {
              let project= await Projectschema.find({selectTeamLead})
              return project
-        
-         },
+        },
+
         // project:async(parent,{projectName})=>{
         //     let name = await Projectschema.findOne({projectName})
         //     return name
            
         // },
-         info :() =>{
+    info :() =>{
              return "im image uploader"
          }, 
          
@@ -115,7 +118,7 @@ const resolvers = {
                 return pname
         },
         projectRelClient:async(parent,{clientName})=>{
-            let cname = await Projectschema.findOne({clientName})
+            let cname = await Projectschema.find({clientName})
             return cname
         },
         clientRelProject:async(parent,{ProjectsName})=>{
@@ -296,17 +299,17 @@ const resolvers = {
 // custom resolver 
 
         Project:{
-            client(u){
-                return  ClientSchema.findOne({Clientname:u.clientName})
+            client(parent){
+                return  ClientSchema.findOne({Clientname:parent.clientName})
         
         },
     },
         Client: {                        
             projects(parent,args,context){
-               let ProjectsName =args
-    
-                let resultproject = ClientSchema.filter((a)=> ProjectsName.includes(a.projectName))
-                return resultproject
+            //    let ProjectsName =args
+                let result = Projectschema.find({projectName:parent.ProjectsName})
+                // let resultproject = ClientSchema.filter( ProjectsName.includes(args))
+                return result
             
             }
         },
