@@ -1,0 +1,45 @@
+query PROJECT_DETAILS{
+  projectDetails{
+  clientName,
+     projectName
+  }
+}
+####################################
+
+query PROJECTS_REL{
+   projectRelClient(clientName:"vijay kumar"){
+    projectName,
+    selectType,
+    clientName
+    client{
+      ClientId,
+      CompanyName,
+      ProjectsName,
+      
+    
+    }
+  }
+}
+###############################################
+
+query CLIENT_REL{
+  clientRelProject(ProjectsName:"graphql db"){
+    ClientId,
+    Clientname,
+    CompanyName,
+    
+    projects{
+      projectName,
+      selectTeam,
+      clientName
+    }
+    
+  }
+}
+
+query DETALS{
+  project(projectName:"graphql db"){
+    clientName,
+    selectType
+  }
+}
