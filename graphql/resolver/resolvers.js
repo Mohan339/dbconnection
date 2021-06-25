@@ -9,8 +9,8 @@ const {createWriteStream}=  require("fs")
 const moongose = require("mongoose");
 const { Stream } = require("stream");
 const {GraphQLUpload} = require("graphql-upload");
-const projects = require("../../models/projects");
 
+const EventSchema = require("../../models/events")
 
 
 // custom resolvers defind vijay
@@ -125,7 +125,10 @@ const resolvers = {
             let pname = await ClientSchema.findOne({ProjectsName})
             return pname
         },
-        
+        getEvents:async(parent,{Date})=>{
+            let eventname = await EventSchema.find({Date})
+            return eventname
+    }
        
     },
    
@@ -161,62 +164,62 @@ const resolvers = {
             throw err;
         });
     },
-    // createEmployee: (parent, args) => {
-    //     const employee = new Employeeschema({
-    //         EmployeeId: args.employeeInput.EmployeeId,
-    //         Employee_name : args.employeeInput.Employee_name,
-    //         Date_of_birth:args.employeeInput.Date_of_birth,
-    //         Date_of_joining: args.employeeInput. Date_of_joining,
-    //         Date_off_course_end: args.employeeInput.Date_off_course_end,
-    //         Education: args.employeeInput.Education,
-    //         Phone_number: args.employeeInput.Phone_number,
-    //         Email_ID: args.employeeInput.Email_ID,
-    //         PAN_card_number: args.employeeInput.PAN_card_number,
-    //         Department_looking_for_Freshers:args.employeeInput.Department_looking_for_Freshers, 
-    //         Company_name :args.employeeInput.Company_name,
-    //         Related_files: args.employeeInput.Related_files,
-    //         No_of_years : args.employeeInput.No_of_years,
-    //         Technology : args.employeeInput.Technology,
-    //         Expiry_date_of_passport :args.employeeInput.Expiry_date_of_passport,
-    //         current_salary: args.employeeInput.current_salary,
-    //         employe_Image:args.employeeInput.employe_Image,
-    //         designation:args.employeeInput.designation,
-    //         description: args.employeeInput.description,
-    //         Aadhar_Number: args.employeeInput.Aadhar_Number,
-    //         passportNumber:args.employeeInput.passportNumber,
-    //         resume: args.employeeInput.resume,
-    //         clients : args.employeeInput.Employee_name
-               
+    createEmployee: (parent, args) => {
+        const employee = new Employeeschema({
+            EmployeeId: args.employeeInput.EmployeeId,
+            Employee_name : args.employeeInput.Employee_name,
+            Date_of_birth:args.employeeInput.Date_of_birth,
+            Date_of_joining: args.employeeInput. Date_of_joining,
+            Date_off_course_end: args.employeeInput.Date_off_course_end,
+            Education: args.employeeInput.Education,
+            Phone_number: args.employeeInput.Phone_number,
+            Email_ID: args.employeeInput.Email_ID,
+            PAN_card_number: args.employeeInput.PAN_card_number,
+            Department_looking_for_Freshers:args.employeeInput.Department_looking_for_Freshers, 
+            Company_name :args.employeeInput.Company_name,
+            Related_files: args.employeeInput.Related_files,
+            No_of_years : args.employeeInput.No_of_years,
+            Technology : args.employeeInput.Technology,
+            Expiry_date_of_passport :args.employeeInput.Expiry_date_of_passport,
+            current_salary: args.employeeInput.current_salary,
+            employe_Image:args.employeeInput.employe_Image,
+            designation:args.employeeInput.designation,
+            description: args.employeeInput.description,
+            Aadhar_Number: args.employeeInput.Aadhar_Number,
+            passportNumber:args.employeeInput.passportNumber,
+            resume: args.employeeInput.resume,
+            clients : "vijay kumar"              
            
-    //     });
-    //     let createdEmp;
-    //     return employee.save()
-    //      .then(result => {
-    //         createdEmp = {...result._doc}
-    //         console.log(result);
-    //         return ClientSchema.find(employees)
-    //     })
-    //     .then(client => {
-    //         client.employees.push(employee);
-    //         return client.save();
-    //     })
-    //     .then(result =>{
-    //             return createdEmp;  
-    //         }
-    //     ).catch(err=> {
-    //         console.log(err);
-    //         throw err;
-    //     });
+        });
+        let createdEmp;
+        return employee.save()
+         .then(result => {
+          
+            console.log(result);
+            createdEmp = {...result._doc}
+            return ClientSchema.find("vijay kumar")
+        })
+        .then(client => {
+            client.employees.push(employee);
+            return client.save(); 
+        })
+        .then(result =>{ 
+                return createdEmp  
+            }
+        ).catch(err=> {
+            console.log(err);
+            throw err;
+        });
         
-    // } ,
+    } ,
     
-        createEmployee:async(parent, args)=>{
-            let result = await Employeeschema.create(args.employeeInput)
-            return result
-        },
+        // createEmployee:async(parent, args)=>{
+        //     let result = await Employeeschema.create(args.employeeInput)
+        //     return result
+        // },
 
         createProject: async(parent,args) => {
-            let result = await Projectschema.create(args.pInput,client)            
+            let result = await Projectschema.create(args.pInput)            
             return result
         },
 
@@ -292,6 +295,23 @@ const resolvers = {
             let result = await PreClientSchema.create(args.pCInput)
             return result     
         },
+
+        createEvent: async(parent, args)=>{
+            let eventresult =  new EventSchema({
+                Title: args.eventInput.Title,
+                Description: args.eventInput.Description, 
+                StartTime: args.eventInput.StartTime,
+                EndTime: args.eventInput.EndTime,
+                Creator: args.eventInput.Creator,
+                Date: new Date().toISOString()
+            });
+            return eventresult.save().then(result=>{
+                    return{...result._doc}
+                }
+            ).catch(err =>{
+                throw err
+            })
+        }, 
             
 },
 
@@ -305,7 +325,7 @@ const resolvers = {
         },
     },
         Client: {                        
-            projects(parent,args,context){
+            projects(parent){
             //    let ProjectsName =args
                 let result = Projectschema.find({projectName:parent.ProjectsName})
                 // let resultproject = ClientSchema.filter( ProjectsName.includes(args))

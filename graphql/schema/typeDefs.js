@@ -47,7 +47,7 @@ const typeDefs = gql`
                 Aadhar_Number: Int
                 passportNumber:Int
                 resume: String 
-                clients: Client!
+                clients:[Client!]
                
             }
             type Project{
@@ -195,7 +195,23 @@ const typeDefs = gql`
                 Country: String
                 PreclientImage: String
                }
+               type Events{
+                Title: [String]
+                Description: String 
+                StartTime: String
+                EndTime: String
+                Creator: String
+                Date: String
+               }
 
+               input EventInput{
+                Title: [String]
+                Description: String 
+                StartTime: String
+                EndTime: String
+                Creator: String
+                Date: String
+               }
 
             type Query {               
                 traineeDetails: [Trainee]   
@@ -210,7 +226,7 @@ const typeDefs = gql`
                 project(projectName: String):Project
                 projectRelClient(clientName: String): [Project]
                 clientRelProject(ProjectsName:String):Client
-               
+                getEvents(Date:String):[Events]    #added events
             },
             scalar Upload,
             type Mutation {              
@@ -230,6 +246,8 @@ const typeDefs = gql`
                 
                 createClient(clientInput: ClientInput): Client                      
                 createPreClient(pCInput: PreClientInput):PreClient
+                createEvent(eventInput: EventInput):Events
+
                 }
              
         `;

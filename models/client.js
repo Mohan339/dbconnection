@@ -56,10 +56,10 @@ const ClientSchema = new Schema({
     Employee_name:{
          type:String
     },
-    employees:{
+    employees:[{
         type: Schema.Types.String,
         ref: 'onandgoemployee'
-    },
+    }],
     WorkingProject:[{
         type: Schema.Types.Array,
         ref:"onandgoprojects"
