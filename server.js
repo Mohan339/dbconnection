@@ -40,8 +40,8 @@ mongoose.connect("mongodb+srv://logincred:passwd@cluster0.slvqd.mongodb.net/HRMS
 {useNewUrlParser : true, useUnifiedTopology : true, useCreateIndex:true,
 useFindAndModify:false})
 
-app.listen({port:4000}, () =>{
-        console.log(`serve is ready at http://localhost:4000`)
+app.listen({port:4001}, () =>{
+        console.log(`serve is ready at http://localhost:4001`)
     })  
 
 
