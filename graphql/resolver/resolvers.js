@@ -105,7 +105,7 @@ const resolvers = {
     clientDetails: ()=>{
              return ClientSchema.find()
          },
-    preClientDetails: ()=>{
+        preClientDetails: ()=>{
             return PreClientSchema.find()
         },
      
@@ -320,15 +320,21 @@ const resolvers = {
 
         Project:{
             client(parent){
-                return  ClientSchema.findOne({Clientname:parent.clientName})
+                return  ClientSchema.findOne({Clientname:parent.clientName}) 
         
         },
     },
         Client: {                        
-            projects(parent){
+            projects(parent,args){
+                
             //    let ProjectsName =args
                 let result = Projectschema.find({projectName:parent.ProjectsName})
-                // let resultproject = ClientSchema.filter( ProjectsName.includes(args))
+                
+                // let x =()=>{ 
+                //    return x.ProjectsName.includes(parent.projectName)
+                // }
+                // let resultproject = ClientSchema
+                // .filter(x)
                 return result
             
             }

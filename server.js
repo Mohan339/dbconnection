@@ -1,7 +1,7 @@
 
 const express = require("express");
 const {ApolloServer} = require("apollo-server-express");
-const {  graphqlUploadExpress } = require('graphql-upload');
+const {graphqlUploadExpress} = require('graphql-upload');
 const cors  = require("cors")
 const {join} = require("path")
 const mongoose = require("mongoose")
@@ -13,7 +13,7 @@ const {resolvers}= require("./graphql/resolver/resolvers");
 
 const corsOption ={
     origin:"http://localhost:3000", 
-    Crendentials: true
+    Credentials: true
 }
 
 const app = express();
@@ -33,7 +33,7 @@ const server = new ApolloServer(
 app.use(graphqlUploadExpress())
 app.use(express.static(join(__dirname,'./uploads' )))
 
-server.applyMiddleware({app,cors:false});
+server.applyMiddleware({app,cors:corsOption});
 
 mongoose.set('useCreateIndex', true)
 mongoose.connect("mongodb+srv://logincred:passwd@cluster0.slvqd.mongodb.net/HRMS?retryWrites=true&w=majority",
